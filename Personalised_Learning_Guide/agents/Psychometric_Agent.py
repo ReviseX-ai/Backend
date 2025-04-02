@@ -59,6 +59,7 @@ class PsychometricAnalyzer:
         3. Personalized strategies for optimal study based on their psychometric profile
         4. Recommendations for managing exam stress and improving focus based on their profile
         5. Guidance on how to leverage their psychological strengths for competitive exam preparation
+        6. Provide the analysis within 150 words, but must include top most important points.
         
         Format your response in clear sections with concise, actionable insights.
         
@@ -266,17 +267,17 @@ if __name__ == "__main__":
     print(analysis)
     print("\n" + "-" * 50 + "\n")
 
-    # Example of getting subject-specific advice
-    physics_advice = analyzer.generate_subject_specific_advice(sample_data, "Physics")
-    print("PHYSICS-SPECIFIC LEARNING STRATEGIES:")
-    print(physics_advice)
-    print("\n" + "-" * 50 + "\n")
+    # # Example of getting subject-specific advice
+    # physics_advice = analyzer.generate_subject_specific_advice(sample_data, "Physics")
+    # print("PHYSICS-SPECIFIC LEARNING STRATEGIES:")
+    # print(physics_advice)
+    # print("\n" + "-" * 50 + "\n")
 
     # Extract specific insights
     learning_style = analyzer.extract_learning_style(sample_data)
     print(f"Dominant Learning Style: {learning_style}")
 
-    stress_tips = analyzer.get_stress_management_tips(sample_data)
-    print("Stress Management Recommendations:")
-    for tip in stress_tips:
-        print(f"- {tip}")
+    # stress_tips = analyzer.get_stress_management_tips(sample_data)
+    # print("Stress Management Recommendations:")
+    # for tip in stress_tips:
+    #     print(f"- {tip}")
