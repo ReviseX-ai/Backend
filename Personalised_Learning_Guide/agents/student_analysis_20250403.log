@@ -1,0 +1,7 @@
+2025-04-03 19:58:56,732 - INFO - MistakeFinderAgent initialized successfully
+2025-04-03 19:58:56,732 - INFO - Starting performance analysis...
+2025-04-03 19:58:56,733 - ERROR - Error in LLM analysis: 'Agent' object has no attribute 'agenerate'
+2025-04-03 19:58:56,733 - ERROR - Error in LLM analysis: 'Agent' object has no attribute 'agenerate'
+2025-04-03 19:58:56,734 - ERROR - Error in LLM analysis: 'Agent' object has no attribute 'agenerate'
+2025-04-03 19:58:56,734 - ERROR - Error generating study plan: 'Agent' object has no attribute 'agenerate'
+2025-04-03 19:58:56,734 - ERROR - Error during analysis: 'charmap' codec can't encode character '\U0001f50d' in position 81: character maps to <undefined>
