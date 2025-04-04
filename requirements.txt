@@ -1,3 +1,6 @@
 agno
 google-genai
 langgraph
+uvicorn
+fastapi
+pydantic
