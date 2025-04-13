@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Psychometric Test</title>
+    <style>
+        :root {
+            --primary-color: #7e57c2;
+            --secondary-color: #b085f5;
+            --background-color: #f5f7ff;
+            --text-color: #2c3e50;
+            --success-color: #4caf50;
+            --shadow-color: rgba(0, 0, 0, 0.1);
+            --error-color: #ff5252;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: var(--background-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            width: 100%;
+            margin: 2rem auto;
+            background: white;
+            padding: 2rem;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px var(--shadow-color);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .metadata {
+            background: var(--primary-color);
+            color: white;
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin-bottom: 2rem;
+            font-size: 0.95rem;
+            line-height: 1.8;
+        }
+
+        .metadata div {
+            display: flex;
+            justify-content: space-between;
+            gap: 1rem;
+        }
+
+        .progress-container {
+            margin: 2rem 0;
+            padding: 1rem;
+            background: rgba(126, 87, 194, 0.1);
+            border-radius: 15px;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 12px;
+            background: #e0e0e0;
+            border-radius: 6px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            transition: width 0.5s ease;
+            border-radius: 6px;
+        }
+
+        .progress-text {
+            text-align: center;
+            margin-top: 1rem;
+            font-weight: bold;
+            color: var(--primary-color);
+            font-size: 1.1rem;
+        }
+
+        .question-container {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.5s ease;
+            padding: 1rem;
+        }
+
+        .question-container.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .question {
+            margin-bottom: 2rem;
+        }
+
+        h1 {
+            color: var(--primary-color);
+            text-align: center;
+            margin-bottom: 1.5rem;
+            font-size: 2.2rem;
+            font-weight: 700;
+            text-shadow: 2px 2px 4px var(--shadow-color);
+        }
+
+        h2 {
+            color: var(--text-color);
+            margin-bottom: 1.5rem;
+            font-size: 1.6rem;
+            border-bottom: 2px solid var(--primary-color);
+            padding-bottom: 0.5rem;
+            display: inline-block;
+        }
+
+        .options {
+            display: grid;
+            gap: 1.2rem;
+            margin-top: 2rem;
+        }
+
+        .option {
+            position: relative;
+            cursor: pointer;
+            padding: 1.2rem;
+            background: white;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+        }
+
+        .option:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px var(--shadow-color);
+            border-color: var(--secondary-color);
+        }
+
+        .option.selected {
+            background: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+            transform: scale(1.02);
+        }
+
+        .option input {
+            display: none;
+        }
+
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 2.5rem;
+            padding: 1rem;
+            background: rgba(126, 87, 194, 0.05);
+            border-radius: 15px;
+        }
+
+        .btn {
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            min-width: 140px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-size: 0.9rem;
+        }
+
+        .btn-next {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .btn-prev {
+            background: #e0e0e0;
+            color: var(--text-color);
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px var(--shadow-color);
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .summary {
+            display: none;
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .summary.active {
+            display: block;
+            animation: fadeIn 0.8s ease;
+        }
+
+        .success-message {
+            background: var(--success-color);
+            color: white;
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin-top: 2rem;
+            text-align: center;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.5s ease;
+            font-size: 1.1rem;
+        }
+
+        .success-message.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .save-indicator {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: var(--success-color);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 25px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            z-index: 1000;
+        }
+
+        .save-indicator.active {
+            opacity: 1;
+        }
+
+        .error-message {
+            background: var(--error-color);
+            color: white;
+            padding: 1rem;
+            border-radius: 10px;
+            margin-top: 1rem;
+            display: none;
+        }
+
+        .error-message.active {
+            display: block;
+            animation: shake 0.5s ease-in-out;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            75% { transform: translateX(10px); }
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+                margin: 1rem auto;
+            }
+
+            .btn {
+                padding: 0.8rem 1.5rem;
+                min-width: 120px;
+                font-size: 0.8rem;
+            }
+
+            h1 {
+                font-size: 1.8rem;
+            }
+
+            h2 {
+                font-size: 1.4rem;
+            }
+
+            .option {
+                padding: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="metadata">
+            <div>Started: <span id="startDate">2025-04-13 18:50:24</span></div>
+            <div>Last Updated: <span id="currentDate">2025-04-13 18:50:24</span></div>
+            <div>User: <span id="currentUser">codegeek03</span></div>
+        </div>
+
+        <h1>🧠 Student Psychometric Test</h1>
+        
+        <div class="progress-container">
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressBar"></div>
+            </div>
+            <div class="progress-text" id="progressText">Question 1 of 10</div>
+        </div>
+
+        <div id="questionContainer" class="question-container active">
+            <!-- Questions will be inserted here -->
+        </div>
+
+        <div id="errorMessage" class="error-message">
+            Please select an answer before proceeding.
+        </div>
+
+        <div class="navigation">
+            <button id="prevBtn" class="btn btn-prev" disabled>Previous</button>
+            <button id="nextBtn" class="btn btn-next">Next</button>
+        </div>
+
+        <div id="summary" class="summary">
+            <h2>Test Complete! 🎉</h2>
+            <p>Thank you for completing the psychometric test.</p>
+            <div id="successMessage" class="success-message">
+                Your responses have been recorded and saved successfully!
+            </div>
+        </div>
+    </div>
+
+    <div id="saveIndicator" class="save-indicator">
+        Auto-saving...
+    </div>
+
+    <script>
+        const questions = [
+    {
+        question: "How do you prefer to learn new topics?",
+        options: [
+            "A. Watching videos or diagrams",
+            "B. Listening to explanations",
+            "C. Reading books or articles",
+            "D. Doing hands-on activities or experiments"
+        ]
+    },
+    {
+        question: "How do you usually approach a difficult problem?",
+        options: [
+            "A. Break it into smaller parts and analyze",
+            "B. Ask someone for help or guidance",
+            "C. Look for examples or tutorials online",
+            "D. Try solving it repeatedly until you succeed"
+        ]
+    },
+    {
+        question: "How do you feel when working in a group project?",
+        options: [
+            "A. I enjoy it and usually take the lead",
+            "B. I like it if I get to choose my role",
+            "C. I prefer working alone",
+            "D. I adapt to the group but don't speak much"
+        ]
+    },
+    {
+        question: "What motivates you the most to study?",
+        options: [
+            "A. Achieving high marks or rewards",
+            "B. Gaining knowledge and understanding",
+            "C. Parental or teacher expectations",
+            "D. Curiosity and interest in the subject"
+        ]
+    },
+    {
+        question: "When do you feel most focused while studying?",
+        options: [
+            "A. Early morning",
+            "B. Late at night",
+            "C. After physical activity",
+            "D. Doesn't matter – I can focus anytime"
+        ]
+    },
+    {
+        question: "What best describes your reaction to failure?",
+        options: [
+            "A. I try harder next time",
+            "B. I feel disappointed but move on",
+            "C. I get discouraged",
+            "D. I analyze what went wrong and learn from it"
+        ]
+    },
+    {
+        question: "Which subject do you find most enjoyable?",
+        options: [
+            "A. Math or Science",
+            "B. Literature or History",
+            "C. Arts or Music",
+            "D. Sports or Physical Education"
+        ]
+    },
+    {
+        question: "How do you manage time when you have multiple tasks?",
+        options: [
+            "A. I make a schedule and stick to it",
+            "B. I prioritize the easiest tasks first",
+            "C. I do things randomly",
+            "D. I often procrastinate but finish just in time"
+        ]
+    },
+    {
+        question: "How do you react to unfamiliar topics?",
+        options: [
+            "A. I feel excited to explore them",
+            "B. I get nervous but try to understand",
+            "C. I avoid them unless necessary",
+            "D. I ask others to explain it"
+        ]
+    },
+    {
+        question: "Which of these best describes your personality?",
+        options: [
+            "A. Logical and Analytical",
+            "B. Creative and Expressive",
+            "C. Calm and Observant",
+            "D. Energetic and Outgoing"
+        ]
+    }
+];
+
+let currentQuestion = 0;
+const responses = {};
+
+function showSaveIndicator() {
+    const indicator = document.getElementById('saveIndicator');
+    indicator.classList.add('active');
+    setTimeout(() => {
+        indicator.classList.remove('active');
+    }, 2000);
+}
+
+function formatUTCDate(date) {
+    return date.toISOString().slice(0, 19).replace('T', ' ');
+}
+
+function autoSaveResponses() {
+    const currentDate = formatUTCDate(new Date());
+    document.getElementById('currentDate').textContent = currentDate;
+
+    const finalData = {
+        start_timestamp: document.getElementById('startDate').textContent,
+        last_updated: currentDate,
+        user: document.getElementById('currentUser').textContent,
+        responses: responses,
+        completion_status: {
+            total_questions: questions.length,
+            answered_questions: Object.keys(responses).length,
+            current_question: currentQuestion + 1,
+            is_complete: Object.keys(responses).length === questions.length
+        }
+    };
+
+    // Save to localStorage
+    localStorage.setItem('psychometric_responses', JSON.stringify(finalData, null, 2));
+    showSaveIndicator();
+
+    // If test is complete, save to file system
+    if (Object.keys(responses).length === questions.length) {
+        const blob = new Blob([JSON.stringify(finalData, null, 2)], { type: 'application/json' });
+        
+        try {
+            // Save file using the File System Access API if available
+            if (window.showSaveFilePicker) {
+                (async () => {
+                    try {
+                        const handle = await window.showSaveFilePicker({
+                            suggestedName: 'psychometric_responses.json',
+                            types: [{
+                                description: 'JSON File',
+                                accept: {'application/json': ['.json']},
+                            }],
+                        });
+                        const writable = await handle.createWritable();
+                        await writable.write(blob);
+                        await writable.close();
+                    } catch (err) {
+                        console.error('Error saving file:', err);
+                    }
+                })();
+            }
+        } catch (err) {
+            console.error('Error saving file:', err);
+        }
+    }
+}
+
+function updateQuestion() {
+    const questionData = questions[currentQuestion];
+    const container = document.getElementById('questionContainer');
+    
+    container.innerHTML = `
+        <div class="question">
+            <h2>Question ${currentQuestion + 1}</h2>
+            <p>${questionData.question}</p>
+            <div class="options">
+                ${questionData.options.map((option, index) => `
+                    <label class="option ${responses['Q' + (currentQuestion + 1)] === option ? 'selected' : ''}">
+                        <input type="radio" name="q${currentQuestion + 1}" value="${option}" 
+                            ${responses['Q' + (currentQuestion + 1)] === option ? 'checked' : ''}>
+                        ${option}
+                    </label>
+                `).join('')}
+            </div>
+        </div>
+    `;
+
+    const optionElements = container.querySelectorAll('.option');
+    optionElements.forEach(option => {
+        option.addEventListener('click', () => {
+            optionElements.forEach(opt => opt.classList.remove('selected'));
+            option.classList.add('selected');
+            const input = option.querySelector('input');
+            input.checked = true;
+            responses['Q' + (currentQuestion + 1)] = input.value;
+            document.getElementById('errorMessage').classList.remove('active');
+            autoSaveResponses();
+        });
+    });
+
+    updateProgress();
+}
+
+function updateProgress() {
+    const progress = ((currentQuestion + 1) / questions.length) * 100;
+    document.getElementById('progressBar').style.width = `${progress}%`;
+    document.getElementById('progressText').textContent = 
+        `Question ${currentQuestion + 1} of ${questions.length}`;
+    
+    document.getElementById('prevBtn').disabled = currentQuestion === 0;
+    document.getElementById('nextBtn').textContent = 
+        currentQuestion === questions.length - 1 ? 'Finish' : 'Next';
+}
+
+function showSummary() {
+    document.getElementById('questionContainer').style.display = 'none';
+    document.getElementById('summary').classList.add('active');
+    document.getElementById('successMessage').classList.add('active');
+    document.querySelector('.navigation').style.display = 'none';
+    autoSaveResponses();
+}
+
+// Event Listeners and Initialization
+window.onload = function() {
+    const savedData = localStorage.getItem('psychometric_responses');
+    if (savedData) {
+        const parsedData = JSON.parse(savedData);
+        if (parsedData.responses) {
+            Object.assign(responses, parsedData.responses);
+            currentQuestion = parsedData.completion_status.current_question - 1;
+            if (currentQuestion >= questions.length) {
+                currentQuestion = questions.length - 1;
+            }
+        }
+    }
+
+    // Initialize with current date
+    document.getElementById('startDate').textContent = "2025-04-13 19:00:22";
+    document.getElementById('currentDate').textContent = "2025-04-13 19:00:22";
+    document.getElementById('currentUser').textContent = "codegeek03";
+    
+    updateQuestion();
+};
+
+window.onbeforeunload = function() {
+    autoSaveResponses();
+};
+
+document.getElementById('prevBtn').addEventListener('click', () => {
+    if (currentQuestion > 0) {
+        currentQuestion--;
+        updateQuestion();
+    }
+});
+
+document.getElementById('nextBtn').addEventListener('click', () => {
+    const currentResponse = responses['Q' + (currentQuestion + 1)];
+    if (!currentResponse) {
+        document.getElementById('errorMessage').classList.add('active');
+        return;
+    }
+
+    document.getElementById('errorMessage').classList.remove('active');
+    if (currentQuestion < questions.length - 1) {
+        currentQuestion++;
+        updateQuestion();
+    } else {
+        showSummary();
+    }
+});
+    </script>
+</body>
+</html>
