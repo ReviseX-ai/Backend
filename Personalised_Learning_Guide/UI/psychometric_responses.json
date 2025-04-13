@@ -1,0 +1,23 @@
+{
+  "start_timestamp": "2025-04-13 19:00:22",
+  "last_updated": "2025-04-13 19:02:08",
+  "user": "codegeek03",
+  "responses": {
+    "Q1": "A. Watching videos or diagrams",
+    "Q2": "B. Ask someone for help or guidance",
+    "Q3": "A. I enjoy it and usually take the lead",
+    "Q4": "B. Gaining knowledge and understanding",
+    "Q5": "A. Early morning",
+    "Q6": "C. I get discouraged",
+    "Q7": "B. Literature or History",
+    "Q8": "A. I make a schedule and stick to it",
+    "Q9": "D. I ask others to explain it",
+    "Q10": "D. Energetic and Outgoing"
+  },
+  "completion_status": {
+    "total_questions": 10,
+    "answered_questions": 10,
+    "current_question": 10,
+    "is_complete": true
+  }
+}
