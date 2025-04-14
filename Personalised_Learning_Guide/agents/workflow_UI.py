@@ -5,6 +5,12 @@ import altair as alt
 from typing import Dict, Any
 from workflow import run_educational_workflow
 
+st.set_page_config(
+    page_title="ReviseX.ai - Personalised Learning Guide",
+    page_icon="📊",
+    layout="wide",
+    initial_sidebar_state="expanded"
+)
 
 def apply_custom_css():
     """Apply custom CSS styling for the dashboard"""
@@ -98,7 +104,7 @@ def render_header():
             <span style="color:white; font-size:24px;">🎓</span>
         </div>
         <div>
-            <h1 style="margin:0; padding:0;">Educational Assessment Dashboard</h1>
+            <h1 style="margin:0; padding:0;">Personalised Learning Guide</h1>
             <p style="margin:0; padding:0; color:#6B7280;">Personalized insights and recommendations for student success</p>
         </div>
     </div>

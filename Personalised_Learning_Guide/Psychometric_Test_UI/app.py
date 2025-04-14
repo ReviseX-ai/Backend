@@ -9,7 +9,7 @@ import base64
 
 # Set page config
 st.set_page_config(
-    page_title="ReviseX : Student Psychometric Profile",
+    page_title="ReviseX.ai : Student Psychometric Profile",
     page_icon="🧠",
     layout="wide",
     initial_sidebar_state="collapsed"
@@ -682,7 +682,7 @@ def main():
     # Title with animation
     st.markdown("""
     <div class="animated-header">
-        <h1 style="text-align: center; margin: 0;">🧠 ReviseX : Student Psychometric Profile</h1>
+        <h1 style="text-align: center; margin: 0;">🧠 ReviseX.ai : Student Psychometric Profile</h1>
         <p style="text-align: center; margin: 10px 0 0 0; opacity: 0.8;">Discover your unique learning and cognitive preferences</p>
     </div>
     """, unsafe_allow_html=True)
@@ -696,9 +696,9 @@ def main():
 
         # Student Information
         student_name = st.text_input("Enter your name:", key="student_name_input")
-        class_name = st.text_input("Enter your class name (e.g., CS101, Math202):", key="class_name_input")
-        email = st.text_input("School email address:", key="email_input", placeholder="student@school.edu")
-        contact = st.text_input("Contact number:", key="contact_input", placeholder="+1234567890")
+        class_name = st.text_input("Enter your student ID", key="class_name_input")
+        email = st.text_input("Grade", key="email_input", placeholder="12th Grade")
+        contact = st.text_input("Target Exam", key="contact_input", placeholder="JEE Advanced ")
 
         # Get current UTC time
         current_time = "2025-04-14 08:12:24"  # Using the provided timestamp
@@ -716,7 +716,7 @@ def main():
                 # Show a summary
                 st.success("✅ Registration Complete!")
                 time.sleep(1)  # Small delay for better UX
-                st.experimental_rerun()  # Rerun to move to question section
+                st.rerun()  # Rerun to move to question section
                 
         st.markdown('</div>', unsafe_allow_html=True)
     
@@ -769,19 +769,19 @@ def main():
                 if st.session_state.current_question > 0:
                     if st.button("Previous"):
                         st.session_state.current_question -= 1
-                        st.experimental_rerun()
+                        st.rerun()
 
             with col3:
                 if selected_option:
                     if st.session_state.current_question < len(questions) - 1:
                         if st.button("Next"):
                             st.session_state.current_question += 1
-                            st.experimental_rerun()
+                            st.rerun()
                     else:
                         if st.button("Complete Test"):
                             st.session_state.test_completed = True
                             save_responses_to_server()
-                            st.experimental_rerun()
+                            st.rerun()
                 else:
                     st.button("Next", disabled=True)
             
@@ -866,7 +866,7 @@ def main():
             if st.button("Reset Test"):
                 for key in list(st.session_state.keys()):
                     del st.session_state[key]
-                st.experimental_rerun()
+                st.rerun()
                 
             st.markdown('</div>', unsafe_allow_html=True)
 
