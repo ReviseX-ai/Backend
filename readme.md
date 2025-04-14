@@ -18,7 +18,7 @@ A personalized learning recommendation engine tailored to user performance and b
 - Adaptive difficulty handling  
 
 ### 🎯 Personalized Learning Pipeline
-![Personalized Learning Pipeline](assets\Personalised_Learning_gude.png) 
+![Personalized Learning Pipeline](C:\Users\Srinjoy\OneDrive\Desktop\ReviseX-ai\Backend\assets\Personalised_Learning_gude.png) 
 
 ### 🔹 `Question_Generation_Guide/`
 A module that generates intelligent and diverse question types for active learning.
@@ -29,7 +29,7 @@ A module that generates intelligent and diverse question types for active learni
 
 
 ### 🧠 Question Generation Pipeline
-![Question Generation Pipeline](assets\Question_gen_pipeline.png) 
+![Question Generation Pipeline](C:\Users\Srinjoy\OneDrive\Desktop\ReviseX-ai\Backend\assets\Personalised_Learning_gude.png) 
 
 
 ### 🔹 `YouTube_Tutorial/`
