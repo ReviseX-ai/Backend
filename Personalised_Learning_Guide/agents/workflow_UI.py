@@ -6,89 +6,266 @@ from typing import Dict, Any
 from workflow import run_educational_workflow
 
 
-def apply_custom_css():
-    """Apply custom CSS styling for the dashboard"""
-    st.markdown("""
-    <style>
-        /* Main area styling */
-        .main .block-container {
-            padding-top: 2rem;
-            padding-bottom: 2rem;
-        }
-        
-        /* Headers styling */
-        h1 {
-            color: #1E3A8A;
-            padding-bottom: 1rem;
-            border-bottom: 2px solid #E5E7EB;
-            margin-bottom: 2rem;
-        }
-        h2 {
-            color: #1E40AF;
-            margin-top: 1.5rem;
-        }
-        h3 {
-            color: #2563EB;
-            margin-top: 1rem;
-        }
-        
-        /* Card-like containers */
-        .css-1r6slb0 {
-            background-color: #F9FAFB;
-            border-radius: 0.5rem;
-            padding: 1.5rem;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-        }
-        
-        /* Sidebar styling */
-        .css-1d391kg {
-            background-color: #F3F4F6;
-        }
-        
-        /* Button styling */
-        .stButton>button {
-            background-color: #2563EB;
-            color: white;
-            border-radius: 0.375rem;
-            padding: 0.5rem 1rem;
-            font-weight: 500;
-            border: none;
-            width: 100%;
-        }
-        .stButton>button:hover {
-            background-color: #1D4ED8;
-        }
-        
-        /* Metrics styling */
-        .css-1xarl3l {
-            background-color: #EFF6FF;
-            border-radius: 0.5rem;
-            padding: 1rem;
-            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
-        }
-        
-        /* Tab styling */
-        .stTabs [data-baseweb="tab-list"] {
-            gap: 1rem;
-        }
-        .stTabs [data-baseweb="tab"] {
-            height: 3rem;
-            white-space: nowrap;
-            border-radius: 0.375rem 0.375rem 0 0;
-            padding: 0.5rem 1rem;
-            font-weight: 500;
-        }
-        .stTabs [aria-selected="true"] {
-            background-color: #DBEAFE !important;
-            color: #1E40AF !important;
-        }
-        
-        /* Progress bar */
-        .stProgress > div > div {
-            background-color: #3B82F6;
-        }
-    </style>
-    """, unsafe_allow_html=True)
+# Custom CSS for a more modern and visually appealing UI
+st.markdown("""
+<style>
+    /* Main area styling */
+    .main .block-container {
+        padding-top: 2rem;
+        padding-bottom: 2rem;
+    }
+    
+    /* Global Styles */
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+    
+    * {
+        font-family: 'Poppins', sans-serif;
+    }
+    
+    /* Headers styling */
+    h1 {
+        color: #1E3A8A;
+        padding-bottom: 1rem;
+        border-bottom: 2px solid #E5E7EB;
+        margin-bottom: 2rem;
+    }
+    
+    h2 {
+        color: #1E40AF;
+        margin-top: 1.5rem;
+    }
+    
+    h3 {
+        color: #2563EB;
+        margin-top: 1rem;
+    }
+    
+    /* Card-like containers */
+    .css-1r6slb0 {
+        background-color: #F9FAFB;
+        border-radius: 0.5rem;
+        padding: 1.5rem;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    }
+    
+    /* Progress Bar */
+    .stProgress > div > div {
+        background-image: linear-gradient(to right, #2563EB, #1E40AF);
+        border-radius: 10px;
+    }
+    
+    .stProgress {
+        height: 15px;
+    }
+    
+    /* Buttons */
+    .stButton button {
+        background-color: #2563EB;
+        color: white;
+        border-radius: 0.375rem;
+        padding: 0.5rem 1rem;
+        font-weight: 500;
+        border: none;
+        box-shadow: 0 4px 15px rgba(37, 99, 235, 0.4);
+        transition: all 0.3s ease;
+    }
+    
+    .stButton button:hover {
+        background-color: #1E40AF;
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(37, 99, 235, 0.6);
+    }
+    
+    .stButton button:active {
+        transform: translateY(1px);
+    }
+    
+    .stButton button:disabled {
+        background-color: #E5E7EB;
+        box-shadow: none;
+        color: #9CA3AF;
+    }
+    
+    /* Question Container */
+    .question-container {
+        background-color: #F9FAFB;
+        padding: 2.5rem;
+        border-radius: 0.5rem;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        margin: 1rem 0;
+        border-left: 5px solid #2563EB;
+        transition: all 0.3s ease;
+    }
+    
+    .question-container:hover {
+        box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        transform: translateY(-2px);
+    }
+    
+    /* Metadata Section */
+    .metadata {
+        background-color: #EFF6FF;
+        color: #1E3A8A;
+        padding: 2rem;
+        border-radius: 0.5rem;
+        margin-bottom: 2rem;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    }
+    
+    /* Success Messages */
+    .success-message {
+        background-color: #ECFDF5;
+        color: #065F46;
+        padding: 2rem;
+        border-radius: 0.5rem;
+        text-align: center;
+        margin: 2rem 0;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    }
+    
+    .saving-indicator {
+        display: flex;
+        align-items: center;
+        background-color: #F3F4F6;
+        border-radius: 0.5rem;
+        padding: 0.5rem 1rem;
+        color: #4B5563;
+        font-size: 0.875rem;
+        margin-top: 1rem;
+    }
+    
+    .saving-indicator.saved {
+        background-color: #ECFDF5;
+        color: #065F46;
+    }
+    
+    .pulsing-dot {
+        height: 8px;
+        width: 8px;
+        background-color: #2563EB;
+        border-radius: 50%;
+        margin-right: 8px;
+        animation: pulse 1.5s infinite;
+    }
+    
+    .saving-indicator.saved .pulsing-dot {
+        background-color: #059669;
+        animation: none;
+    }
+    
+    /* Radio Buttons */
+    div.row-widget.stRadio > div {
+        display: flex;
+        flex-direction: column;
+        gap: 0.75rem;
+    }
+    
+    div.row-widget.stRadio > div[role="radiogroup"] > label {
+        background-color: white;
+        border: 1px solid #E5E7EB;
+        border-radius: 0.5rem;
+        padding: 1rem;
+        transition: all 0.2s ease;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    }
+    
+    div.row-widget.stRadio > div[role="radiogroup"] > label:hover {
+        border-color: #2563EB;
+        box-shadow: 0 4px 6px -1px rgba(37, 99, 235, 0.1);
+        transform: translateY(-2px);
+    }
+    
+    div.row-widget.stRadio > div[role="radiogroup"] > label[data-baseweb="radio"] > div:first-child {
+        background-color: white;
+        border-color: #2563EB;
+    }
+    
+    div.row-widget.stRadio > div[role="radiogroup"] > label[data-baseweb="radio"] input:checked + div {
+        background-color: #2563EB;
+        border-color: #2563EB;
+    }
+    
+    /* Header animation */
+    .animated-header {
+        background-color: #1E3A8A;
+        color: white;
+        padding: 1.5rem;
+        border-radius: 0.5rem;
+        margin-bottom: 2rem;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    }
+    
+    .animated-header h1 {
+        color: white;
+        border-bottom: none;
+        margin-bottom: 0.5rem;
+        padding-bottom: 0;
+    }
+    
+    /* Results Section */
+    .results-container {
+        background-color: #F9FAFB;
+        padding: 2.5rem;
+        border-radius: 0.5rem;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        margin: 2rem 0;
+    }
+    
+    .results-header {
+        background-color: #1E3A8A;
+        color: white;
+        padding: 1.5rem;
+        border-radius: 0.5rem;
+        margin-bottom: 2rem;
+        text-align: center;
+    }
+    
+    .results-header h1 {
+        color: white;
+        border-bottom: none;
+        margin-bottom: 0.5rem;
+        padding-bottom: 0;
+    }
+    
+    /* Username input */
+    div.stTextInput > div > div > input {
+        border-radius: 0.5rem;
+        border: 1px solid #E5E7EB;
+        padding: 0.75rem;
+        font-size: 1rem;
+        transition: all 0.3s;
+    }
+    
+    div.stTextInput > div > div > input:focus {
+        border-color: #2563EB;
+        box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.2);
+    }
+    
+    /* Dataframe styling */
+    .dataframe-container {
+        margin-top: 2rem;
+        border-radius: 0.5rem;
+        overflow: hidden;
+        border: 1px solid #E5E7EB;
+    }
+    
+    /* User info display */
+    .user-info {
+        background-color: #EFF6FF;
+        color: #1E3A8A;
+        padding: 0.5rem 1rem;
+        border-radius: 0.5rem;
+        margin-bottom: 1rem;
+        font-size: 0.875rem;
+    }
+    
+    .timestamp {
+        color: #4B5563;
+        font-size: 0.75rem;
+        margin-top: 0.25rem;
+    }
+</style>
+""", unsafe_allow_html=True)
 
 def render_header():
     """Display the dashboard header with logo and title"""
