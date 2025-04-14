@@ -16,7 +16,6 @@ from mistake_finder import MistakeFinder
 
 load_dotenv()
 
-# Define state using Annotated for potentially concurrent updates
 class WorkflowState(TypedDict):
     user_id: str
     psychometric_data: Dict[str, Any]
@@ -56,7 +55,6 @@ def progress_tracker_agent(state: WorkflowState) -> WorkflowState:
         sample_data = state['progress_data']
         
         response = agent.analyze_progress(json.dumps(sample_data, indent=2))
-        # Make sure response is a string
         if not isinstance(response, str):
             response = str(response)
         state["progress_insights"] = response
@@ -88,7 +86,6 @@ def syllabus_suggestion_agent(state: WorkflowState) -> WorkflowState:
         progress_insights = state['progress_insights']
         
         response = agent.get_syllabus_suggestion(psychometric_insights, progress_insights)
-        # Make sure response is a string
         if not isinstance(response, str):
             response = str(response)
         state["syllabus_recommendations"] = response
