@@ -6,14 +6,12 @@ import os
 import logging
 from typing import Optional
 
-load_dotenv()
-
-class CalculusHintGenerator:
-    """A class for generating a single, targeted hint for calculus problems."""
+class HintGenerator:
+    """A class for generating helpful hints for any type of question."""
     
     def __init__(self, model_id: str = "gemini-2.0-flash-exp", enable_reasoning: bool = True):
         """
-        Initialize the CalculusHintGenerator.
+        Initialize the HintGenerator.
         
         Args:
             model_id: The ID of the Gemini model to use
@@ -31,29 +29,32 @@ class CalculusHintGenerator:
             model=Gemini(id=model_id),
             reasoning=enable_reasoning,
             instructions="""
-            You are an expert calculus tutor with years of experience helping students overcome challenges.
-            Your task is to provide ONE clear, targeted hint for a calculus problem.
+            You are an expert tutor with years of experience helping students across various subjects.
+            Your task is to provide ONE clear, targeted hint for any question a student might ask.
             
-            For each problem:
-            1. Carefully analyze the question and correct answer to identify the core concept
-            2. Create a single hint that guides the student toward the solution without revealing it
+            For each question:
+            1. Carefully analyze the question to identify the core concept or knowledge required
+            2. Create a single hint that guides the student toward figuring out the solution themselves
             3. Ensure your hint is specific enough to be helpful but vague enough to make the student think
-            4. Focus on highlighting the mathematical principles needed (e.g., product rule, chain rule, u-substitution)
-            5. Where appropriate, suggest a starting point or approach
+            4. Focus on highlighting the key principles or approaches needed for that particular question
+            5. Where appropriate, suggest a starting point or approach without giving away the answer
             
             Your hint should be 2-3 sentences at most, clear and concise.
-            Avoid giving away the solution method entirely, but ensure the hint is substantial enough
-            to help a struggling student make progress.
+            Avoid giving away the solution directly, but ensure the hint is substantial enough
+            to help a struggling student make progress on their own.
+            
+            You will only be given the question, not the answer, so ensure your hint
+            is based on guiding the student's problem-solving process rather than
+            working backward from a solution.
             """
         )
     
-    def generate_hint(self, question: str, answer: str) -> str:
+    def generate_hint(self, question: str) -> str:
         """
-        Generate a single focused hint for a calculus problem.
+        Generate a single focused hint for any type of question.
         
         Args:
-            question: The calculus problem text
-            answer: The correct answer to the problem
+            question: The question text
             
         Returns:
             A single hint string
@@ -61,12 +62,10 @@ class CalculusHintGenerator:
         self.logger.info(f"Generating hint for: {question[:50]}...")
         
         prompt_template = f"""
-        Generate a single, focused hint for the following calculus problem.
+        Generate a single, focused hint for the following question.
         The hint should guide the student in the right direction without giving away too much.
         
-        PROBLEM: {question}
-        
-        CORRECT ANSWER: {answer}
+        QUESTION: {question}
         
         Provide just ONE clear, concise hint (2-3 sentences) that will help the student
         understand the conceptual approach needed to solve this problem.
@@ -107,13 +106,18 @@ class CalculusHintGenerator:
         return cleaned
 
 if __name__ == "__main__":
-    hint_generator = CalculusHintGenerator()
+    hint_generator = HintGenerator()
     
-    question = "Find the derivative of f(x) = x^3 * sin(x)."
-    answer = "f'(x) = 3x^2 * sin(x) + x^3 * cos(x)"
+    questions = [
+        "Find the derivative of f(x) = x^3 * sin(x).",
+        "What are the main causes of the French Revolution?",
+        "How does photosynthesis work?",
+        "Solve for x: 3x + 7 = 22",
+        "What is the significance of the green light in The Great Gatsby?"
+    ]
     
-    hint = hint_generator.generate_hint(question=question, answer=answer)
-    
-    print("Question:", question)
-    print("Answer:", answer)
-    print("Hint:", hint)
+    for question in questions:
+        hint = hint_generator.generate_hint(question=question)
+        
+        print("\nQuestion:", question)
+        print("Hint:", hint)
