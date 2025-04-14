@@ -10,7 +10,7 @@ import re
 class QuestionMaker:
     def __init__(self):
         # API key for Gemini model
-        self.api_key = "AIzaSyAmO9Jo12hF2XQZ9nlVDA7rL_Y-Fikypz0"
+        self.api_key = "AIzaSyBtsYZXU_L8-dfmq3aFmO-24tPBGQdhIbI"
 
         # Initialize both agents
         self.jee_agent = self._create_jee_agent()
