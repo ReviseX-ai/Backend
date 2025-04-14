@@ -3,56 +3,46 @@ from agno.models.google import Gemini
 from dotenv import load_dotenv
 import chardet
 import os
+import logging
 
-temp_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "temp"))
-
-def detect_encoding(file_path):
-    """
-        Detects the encoding of a given text file to ensure proper reading.
-        :param file_path: Path to the file whose encoding needs to be detected.
-        :return: Detected encoding type as a string.
-    """
-    with open(file_path, "rb") as f:
-        result = chardet.detect(f.read())
-    return result["encoding"]
-
-def read_file(file_name):
-    """
-        Reads the contents of a text file after detecting its encoding.
-        :param file_name: Name of the file to read.
-        :return: String content of the file.
-    """
-    file_path = os.path.join(temp_dir, file_name)
-    encoding = detect_encoding(file_path)
-    with open(file_path, "r", encoding=encoding) as file:
-        return file.read()
+# Set up logging
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 class SyllabusSuggestionAgent:
-    """
-    A class-based implementation of an AI-powered syllabus suggestion agent.
-    This agent reads progress tracking data and psychometric analysis,
-    processes them, and generates an optimal study plan using the Gemini model.
-    """
-
     def __init__(self):
         """
         Initializes the agent, loads environment variables, and sets up the AI model.
         """
-        load_dotenv()
-        self.agent = Agent(
-            model=Gemini(id="gemini-2.0-flash-exp"),
-            reasoning=True,
-            markdown=True
-        )
-        
+        try:
+            load_dotenv()
+            self.agent = Agent(
+                model=Gemini(id="gemini-2.0-flash-exp"),
+                reasoning=True,
+                markdown=True
+            )
+            logger.info("SyllabusSuggestionAgent initialized successfully")
+        except Exception as e:
+            logger.error(f"Error initializing SyllabusSuggestionAgent: {str(e)}")
+            raise
 
+    def get_syllabus_suggestion(self, progress_tracker_response, psychometric_agent_response):
+        """
+        Generates syllabus suggestions based on progress and psychometric data.
+        """
+        try:
+            prompt = self.generate_prompt(progress_tracker_response, psychometric_agent_response)
+            logger.info("Generated prompt for syllabus suggestion")
+            response = self.agent.run(prompt)
+            logger.info("Received response from Gemini model")
+            return response.content
+        except Exception as e:
+            logger.error(f"Error generating syllabus suggestion: {str(e)}")
+            raise
 
     def generate_prompt(self, progress_tracker_response, psychometric_agent_response):
         """
-        Constructs a well-structured and engaging prompt for the AI agent based on user data.
-        :param progress_tracker_response: The progress tracker data.
-        :param psychometric_agent_response: The psychometric analysis data.
-        :return: A formatted prompt string.
+        Constructs the prompt for the AI agent.
         """
         return f"""
         📚 **Ultimate Syllabus Mastery Plan** 📚
@@ -77,7 +67,7 @@ class SyllabusSuggestionAgent:
         - 🔁 **Revision Blueprint:** (Best recall techniques + schedule)
         - 🎯 **Pro Tips:** (Any cool memory hacks, active recall tricks, etc.)
 
-        Make it concise, actionable, and engaging. Let’s crush this syllabus! 🔥
+        Make it concise, actionable, and engaging. Let's crush this syllabus! 🔥
         """
 
     def get_syllabus_suggestion(self, progress_tracker_response, psychometric_agent_response):
