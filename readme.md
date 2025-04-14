@@ -1,6 +1,5 @@
 # ReviseX-ai Backend
 
-![ReviseX-ai Logo](https://example.com/logo.png) <!-- Replace with your actual logo URL -->
 
 ## 🚀 Overview
 
