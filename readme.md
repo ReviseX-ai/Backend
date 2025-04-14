@@ -1,8 +1,3 @@
-Certainly. Below is a professionally formatted, comprehensive `README.md` file for your **ReviseX-ai Backend** repository, including all the essential sections and updated instructions for installation using `requirements.txt` and virtual environments.
-
----
-
-```markdown
 # ReviseX-ai Backend
 
 ![ReviseX-ai Logo](https://example.com/logo.png) <!-- Replace with your actual logo URL -->
@@ -104,5 +99,4 @@ Please ensure all pull requests are accompanied by appropriate documentation and
 
 This project is licensed under the [MIT License](LICENSE).
 
----
 
