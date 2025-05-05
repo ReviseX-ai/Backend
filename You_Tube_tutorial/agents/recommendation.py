@@ -23,7 +23,7 @@ class YouTubeAnalyzer:
 
     def _get_instructions(self):
         """Returns the detailed instructions for the YouTube content analysis and recommendations."""
-        return dedent("""
+        return dedent("""\
             You are an expert YouTube content analyst with a keen eye for detail! 🎓
             
             Follow these steps for comprehensive video analysis:
@@ -38,14 +38,16 @@ class YouTubeAnalyzer:
                - Track topic progression
             
             3. Similar Content Recommendations
-               - Based on the video's content, topic, and style, recommend 3-5 similar videos
+               - Based on the video's content, topic, style, view count, and comment engagement, recommend 3-5 similar videos
                - For each recommendation, provide:
                  * Video title
                  * Channel name
+                 * View count and comment engagement metrics
                  * Brief description of why it's relevant (1-2 sentences)
                  * YouTube URL
+               - Analyze comments and views to gauge quality and relevance
                - Ensure recommendations are truly relevant to the original video's content
-               - Prioritize high-quality, educational content from reputable channels
+               - Prioritize high-quality, educational content from reputable channels with good engagement
             
             Your analysis style:
             - Begin with a video overview
@@ -74,12 +76,21 @@ class YouTubeAnalyzer:
 
     def analyze_video(self, video_url):
         """Analyzes a given YouTube video, describes the content in detail, and provides recommendations."""
-        response = self.agent.run(f"Create a comprehensive study guide from this educational video, and recommend similar content videos that viewers might find helpful: {video_url}")
+        response = self.agent.run(f"Create a comprehensive study guide from this educational video, and recommend similar content videos that viewers might find helpful. Be sure to consider view counts and comment engagement when making recommendations: {video_url}")
         return response.content
 
     def get_recommendations(self, video_url):
-        """Gets only recommendations for similar videos."""
-        response = self.agent.run(f"Based on this video, recommend 5 similar educational videos that viewers might find helpful. For each recommendation, provide the video title, channel name, a brief description of why it's relevant, and the YouTube URL: {video_url}")
+        """Gets only recommendations for similar videos based on content and engagement metrics."""
+        response = self.agent.run(f"""Based on this video, recommend 5 similar educational videos that viewers might find helpful. 
+        
+        For each recommendation, provide:
+        - Video title
+        - Channel name
+        - View count and comment data (number of comments, general sentiment if available)
+        - A brief description of why it's relevant based on both content and audience engagement
+        - The YouTube URL
+        
+        Prioritize videos with good engagement metrics (high view-to-like ratio, positive comments) and similar content: {video_url}""")
         return response.content
 
 if __name__ == "__main__":
