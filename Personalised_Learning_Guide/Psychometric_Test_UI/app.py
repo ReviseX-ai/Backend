@@ -9,7 +9,7 @@ import base64
 
 # Set page config
 st.set_page_config(
-    page_title="ReviseX.ai : Student Psychometric Profile",
+    page_title="Student Psychometric Profile",
     page_icon="🧠",
     layout="wide",
     initial_sidebar_state="collapsed"
@@ -682,42 +682,19 @@ def main():
     # Title with animation
     st.markdown("""
     <div class="animated-header">
-        <h1 style="text-align: center; margin: 0;">🧠 ReviseX.ai : Student Psychometric Profile</h1>
+        <h1 style="text-align: center; margin: 0;">🧠 Student Psychometric Profile</h1>
         <p style="text-align: center; margin: 10px 0 0 0; opacity: 0.8;">Discover your unique learning and cognitive preferences</p>
     </div>
     """, unsafe_allow_html=True)
     
-    # Registration section
-    if not st.session_state.student_name:
-        st.subheader("Student Registration")
-
-        # Container for student details with custom styling
-        st.markdown('<div class="student-details-container">', unsafe_allow_html=True)
-
-        # Student Information
-        student_name = st.text_input("Enter your name:", key="student_name_input")
-        class_name = st.text_input("Enter your student ID", key="class_name_input")
-        email = st.text_input("Grade", key="email_input", placeholder="12th Grade")
-        contact = st.text_input("Target Exam", key="contact_input", placeholder="JEE Advanced ")
-
-        # Get current UTC time
-        current_time = "2025-04-14 08:12:24"  # Using the provided timestamp
-
-        # Save responses when all fields are filled
-        if student_name and class_name and email:
-            if st.button("Start Assessment"):
-                st.session_state.student_name = student_name
-                st.session_state.class_name = class_name
-                st.session_state.email = email
-                st.session_state.contact = contact
-                st.session_state.registration_time = current_time
-                st.session_state.username = student_name  # Set username for continuity
-                
-                # Show a summary
-                st.success("✅ Registration Complete!")
-                time.sleep(1)  # Small delay for better UX
-                st.rerun()  # Rerun to move to question section
-                
+    # Username input if not already provided
+    if not st.session_state.username:
+        st.markdown('<div class="question-container">', unsafe_allow_html=True)
+        st.subheader("Let's get started!")
+        username = st.text_input("Enter your name or username:", key="username_input")
+        if username:
+            st.session_state.username = username
+            save_responses_to_server()
         st.markdown('</div>', unsafe_allow_html=True)
     
     else:  # After registration
@@ -769,19 +746,19 @@ def main():
                 if st.session_state.current_question > 0:
                     if st.button("Previous"):
                         st.session_state.current_question -= 1
-                        st.rerun()
+                        st.experimental_rerun()
 
             with col3:
                 if selected_option:
                     if st.session_state.current_question < len(questions) - 1:
                         if st.button("Next"):
                             st.session_state.current_question += 1
-                            st.rerun()
+                            st.experimental_rerun()
                     else:
                         if st.button("Complete Test"):
                             st.session_state.test_completed = True
                             save_responses_to_server()
-                            st.rerun()
+                            st.experimental_rerun()
                 else:
                     st.button("Next", disabled=True)
             
@@ -865,10 +842,10 @@ def main():
             st.markdown("### Start Fresh")
             if st.button("Reset Test"):
                 for key in list(st.session_state.keys()):
-                    del st.session_state[key]
-                st.rerun()
-                
-            st.markdown('</div>', unsafe_allow_html=True)
+                    if key != 'username':  # Preserve username
+                        del st.session_state[key]
+                initialize_session_state()
+                st.experimental_rerun()
 
 if __name__ == "__main__":
     main()
